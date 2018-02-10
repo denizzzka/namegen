@@ -1,0 +1,5 @@
+name "namegen"
+description "Repeatable name generator"
+authors "Denis Feklushkin"
+copyright "Copyright © 2018, Denis Feklushkin"
+license "MIT"
