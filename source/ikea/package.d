@@ -17,10 +17,11 @@ string generateName()
 
 wchar[] generateNameWide()
 {
+    wchar[] word;
+
     ubyte minLength = 3;
     ubyte maxLength = 10;
     const ubyte wordLength = uniform(minLength, maxLength, rndg);
-    wchar[] word;
 
     for (ubyte i = 0; i < wordLength; i++)
         word ~= returnNextLetter(word);
