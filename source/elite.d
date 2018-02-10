@@ -1,7 +1,6 @@
 module namegen.elite;
 
-//~ pure:
-private:
+pure:
 
 const
 {
@@ -11,10 +10,10 @@ const
 
     ushort[3] seed = [0x5A4A, 0x0248, 0xB753];
 
-    // Dots should be nullprint characters
     string otherDigrams =
         "ABOUSEITILETSTONLONUTHNO";
 
+    // Dots should be nullprint characters
     string planetDigrams =
         "..LEXEGEZACEBISO"~
         "USESARMAINDIREA."~
@@ -46,19 +45,12 @@ const
         ];
 }
 
-struct SystemInfo
-{
-    string name;
-    string government;
-    string economy;
-}
-
 struct GalaxySeed
 {
     ushort[3] w;
     alias w this;
 
-    void tweakSeed()
+    void tweakSeed() pure
     {
         ushort t = w[0];
         t += w[1];
@@ -87,6 +79,52 @@ GalaxySeed createGalaxySeed(ubyte galaxyNum)
 
     return g;
 }
+
+string makeName(ref GalaxySeed currSeed)
+{
+    string name;
+
+    const longName = currSeed.isLongName;
+
+    foreach(_; 0 .. 3)
+    {
+        name ~= getPair(currSeed);
+        currSeed.tweakSeed;
+    }
+
+    if(longName)
+        name ~= getPair(currSeed);
+
+    currSeed.tweakSeed;
+
+    return name;
+}
+
+unittest
+{
+    for(ubyte gal = 0; gal < galaxiesNum; gal++)
+    {
+        auto currSeed = createGalaxySeed(gal);
+
+        foreach(i; 0 .. systemsPerGalaxy)
+        {
+            string name = makeName(currSeed);
+
+            if(gal == 0)
+            {
+                assert(i != 0 || name == "TIBEDIED", name);
+                assert(i != 7 || name == "LAVE", name);
+            }
+
+            if(gal == 1)
+            {
+                assert(i != 2 || name == "BEEDBEON", name);
+            }
+        }
+    }
+}
+
+private:
 
 void twist(ref ushort x)
 {
@@ -118,48 +156,4 @@ string getPair(in GalaxySeed seed)
     import std.string: replace;
 
     return dg.replace(".", "");
-}
-
-string makeName(ref GalaxySeed currSeed)
-{
-    string name;
-
-    const longName = currSeed.isLongName;
-
-    foreach(_; 0 .. 3)
-    {
-        name ~= getPair(currSeed);
-        currSeed.tweakSeed;
-    }
-
-    if(longName)
-        name ~= getPair(currSeed);
-
-    currSeed.tweakSeed;
-
-    return name;
-}
-
-unittest
-{
-    for(ubyte gal = 0; gal < galaxiesNum; gal++)
-    {
-        auto currSeed = createGalaxySeed(gal);
-
-        foreach(i; 0 .. 256)
-        {
-            string name = makeName(currSeed);
-
-            if(gal == 0)
-            {
-                assert(i != 0 || name == "TIBEDIED", name);
-                assert(i != 7 || name == "LAVE", name);
-            }
-
-            if(gal == 1)
-            {
-                assert(i != 2 || name == "BEEDBEON", name);
-            }
-        }
-    }
 }
