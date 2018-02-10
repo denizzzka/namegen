@@ -17,7 +17,7 @@ string generateName()
 
 wchar[] generateNameWide()
 {
-    const ubyte wordLength = 6; // FIXME
+    const ubyte wordLength = uniform!("[]", ubyte, ubyte)(3, 9);
     wchar[] word;
 
     for (ubyte i = 0; i < wordLength; i++)
@@ -38,7 +38,8 @@ unittest
 {
     import std.stdio;
 
-    generateName.writeln;
+    foreach(_; 0.. 10)
+        generateName.writeln;
 }
 
 private:
@@ -46,8 +47,8 @@ private:
 static import alphabet = namegen.ikea.alphabet;
 import std.random;
 
-// seed a random generator with a constant
-auto rnd = Random(42);
+// Seed a random generator with a constant
+const rnd = Random(42);
 
 // Main function to get and return the next letter
 char returnNextLetter(in wchar[] word)
