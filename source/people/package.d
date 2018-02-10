@@ -17,7 +17,6 @@ Name createName(bool isFemale = false)
     Name ret;
 
     ret.first = selectName(isFemale ? femaleFirst : maleFirst);
-
     ret.last = selectName(lastNames);
 
     return ret;
