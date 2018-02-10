@@ -7,11 +7,13 @@ struct Name
     string last;
 }
 
-Name createName()
+Name createName(bool isFemale = false)
 {
     Name ret;
 
-    ret.first = selectName(maleFirst);
+    ret.first = selectName(isFemale ? femaleFirst : maleFirst);
+
+    ret.last = selectName(lastNames);
 
     return ret;
 }
@@ -20,9 +22,8 @@ unittest
 {
     import std.stdio;
 
-    writeln(createName);
-    writeln(createName);
-    writeln(createName);
+    foreach(i; 0 .. 10)
+        createName(i % 2 == 0).writeln;
 }
 
 private:
@@ -59,7 +60,6 @@ struct NameRecord
     this(string[] a)
     {
         assert(a.length == 4);
-        assert(!a[0].isNumeric);
         assert(a[1].isNumeric);
         assert(a[2].isNumeric);
         assert(a[3].isNumeric);
@@ -71,24 +71,51 @@ struct NameRecord
     }
 }
 
-NameRecord[] getNamesRecords(string filename)()
+// Compile time parsing for big text files is too slow by now, therefore this function is unused
+NameRecord[] getNamesRecordsCTFE(string filename)()
 {
-    import std.string: splitLines;
-    import std.array: split;
+    enum text = import(filename);
 
-    enum lines = import(filename).splitLines;
+    return getNamesRecordsFromText(text);
+}
 
+NameRecord[] getNamesRecordsFromText(string text)
+{
+    string line;
     NameRecord[] recs;
 
-    static foreach(string line; lines)
-        recs ~= NameRecord(line.split);
+    foreach(c; text)
+    {
+        if(c != '\n')
+        {
+            line ~= c;
+        }
+        else
+        {
+            import std.array: split;
+
+            recs ~= NameRecord(line.split);
+            line.length = 0;
+        }
+    }
 
     return recs;
 }
 
-immutable maleFirst = getNamesRecords!"dist.male.first";
-//~ immutable femaleFirst = getNamesRecords!"dist.female.first";
-//~ immutable last = getNamesRecords!"dist.all.last";
+const NameRecord[] maleFirst;
+const NameRecord[] femaleFirst;
+const NameRecord[] lastNames;
+
+static this()
+{
+    immutable maleFirstTextLines = import("dist.male.first");
+    immutable femaleFirstLines = import("dist.female.first");
+    immutable lastTextLines = import("dist.all.last");
+
+    maleFirst = getNamesRecordsFromText(maleFirstTextLines);
+    femaleFirst = getNamesRecordsFromText(femaleFirstLines);
+    lastNames = getNamesRecordsFromText(lastTextLines);
+}
 
 unittest
 {
