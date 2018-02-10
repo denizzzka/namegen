@@ -1,3 +1,9 @@
+/**
+IKEA Name Generator
+
+Based on code by Kate McFaul:
+https://github.com/craftykate/ikea-name-generator
+*/
 module namegen.ikea;
 
 //~ pure:
