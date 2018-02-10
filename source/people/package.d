@@ -5,6 +5,11 @@ struct Name
 {
     string first;
     string last;
+
+    string full() const
+    {
+        return first~" "~last;
+    }
 }
 
 Name createName(bool isFemale = false)
@@ -20,10 +25,11 @@ Name createName(bool isFemale = false)
 
 unittest
 {
-    import std.stdio;
+    assert(createName(false).full == "Kevin Toll");
+    assert(createName(false).full == "Rob Price");
 
-    foreach(i; 0 .. 10)
-        createName(i % 2 == 0).writeln;
+    assert(createName(true).full == "Erika Ressler");
+    assert(createName(true).full == "Sally Coe");
 }
 
 private:
