@@ -1,3 +1,4 @@
+/// Acornsoft Elite space trading video game planet name generator
 module namegen.elite;
 
 pure:
