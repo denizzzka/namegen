@@ -17,7 +17,9 @@ string generateName()
 
 wchar[] generateNameWide()
 {
-    const ubyte wordLength = uniform!("[]", ubyte, ubyte)(3, 9);
+    ubyte minLength = 3;
+    ubyte maxLength = 10;
+    const ubyte wordLength = uniform(minLength, maxLength, rndg);
     wchar[] word;
 
     for (ubyte i = 0; i < wordLength; i++)
@@ -38,8 +40,14 @@ unittest
 {
     import std.stdio;
 
-    foreach(_; 0.. 10)
-        generateName.writeln;
+    foreach(i; 0 .. 13)
+    {
+        auto s = generateName;
+
+        assert(i != 0 || s == "Åökpe", s);
+        assert(i != 5 || s == "Öålih", s);
+        assert(i != 12 || s == "Tigra", s);
+    }
 }
 
 private:
@@ -48,7 +56,7 @@ static import alphabet = namegen.ikea.alphabet;
 import std.random;
 
 // Seed a random generator with a constant
-const rnd = Random(42);
+auto rndg = Random(42);
 
 // Main function to get and return the next letter
 char returnNextLetter(in wchar[] word)
@@ -91,7 +99,7 @@ char returnNextLetter(in wchar[] word)
 /// Get random letter from string of letters
 char grabRandomLetter(in string str)
 {
-    auto idx = uniform(0, str.length);
+    auto idx = uniform(0, str.length, rndg);
 
     return str[idx];
 }
@@ -138,11 +146,11 @@ void endWord(ref wchar[] word)
 void formatSwedish(ref wchar[] word)
 {
     // 50/50 chance of changing first 'a'
-    if(dice(50, 50) == 0)
+    if(dice(rndg, 50, 50) == 0)
         word.replaceFirst('a', 'å');
 
     // 50/50 chance of changing first 'o'
-    if(dice(50, 50) == 0)
+    if(dice(rndg, 50, 50) == 0)
         word.replaceFirst('o', 'ö');
 }
 
