@@ -10,6 +10,8 @@ struct Name
     {
         return first~" "~last;
     }
+
+    alias full this;
 }
 
 Name createName(bool isFemale = false)
@@ -24,11 +26,11 @@ Name createName(bool isFemale = false)
 
 unittest
 {
-    assert(createName(false).full == "Kevin Toll");
-    assert(createName(false).full == "Rob Price");
+    assert(createName(false) == "Kevin Toll");
+    assert(createName(false) == "Rob Price");
 
-    assert(createName(true).full == "Erika Ressler");
-    assert(createName(true).full == "Sally Coe");
+    assert(createName(true) == "Erika Ressler");
+    assert(createName(true) == "Sally Coe");
 }
 
 private:
