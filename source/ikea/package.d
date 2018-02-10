@@ -6,8 +6,6 @@ https://github.com/craftykate/ikea-name-generator
 */
 module namegen.ikea;
 
-//~ pure:
-
 string generateName()
 {
     import std.conv: to;
