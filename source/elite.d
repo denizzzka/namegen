@@ -72,12 +72,11 @@ struct GalaxySeed
 
 GalaxySeed createGalaxySeed(ubyte galaxyNum)
 {
-    assert(galaxyNum > 0);
-    assert(galaxyNum <= 8);
+    assert(galaxyNum < 8);
 
     auto g = GalaxySeed(seed);
 
-    while(galaxyNum > 1)
+    while(galaxyNum > 0)
     {
         g[0].twist;
         g[1].twist;
@@ -143,7 +142,7 @@ string makeName(ref GalaxySeed currSeed)
 
 unittest
 {
-    for(ubyte gal = 1; gal <= galaxiesNum; gal++)
+    for(ubyte gal = 0; gal < galaxiesNum; gal++)
     {
         auto currSeed = createGalaxySeed(gal);
 
@@ -151,13 +150,13 @@ unittest
         {
             string name = makeName(currSeed);
 
-            if(gal == 1)
+            if(gal == 0)
             {
                 assert(i != 0 || name == "TIBEDIED", name);
                 assert(i != 7 || name == "LAVE", name);
             }
 
-            if(gal == 2)
+            if(gal == 1)
             {
                 assert(i != 2 || name == "BEEDBEON", name);
             }
