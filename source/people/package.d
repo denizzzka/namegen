@@ -31,6 +31,9 @@ unittest
 
     assert(createName(true) == "Erika Ressler");
     assert(createName(true) == "Sally Coe");
+
+    // It is to reset RNDG to initial value
+    rndg = Random(42);
 }
 
 private:

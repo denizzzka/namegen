@@ -47,6 +47,9 @@ unittest
         assert(i != 5 || s == "Öålih", s);
         assert(i != 12 || s == "Tigra", s);
     }
+
+    // It is to reset RNDG to initial value
+    rndg = Random(42);
 }
 
 private:
